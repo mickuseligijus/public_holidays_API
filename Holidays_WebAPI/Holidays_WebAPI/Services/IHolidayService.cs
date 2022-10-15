@@ -1,11 +1,13 @@
-﻿namespace Holidays_WebAPI.Services
+﻿using Holidays_WebAPI.Models;
+
+namespace Holidays_WebAPI.Services
 {
     public interface IHolidayService
     {
-        public Task<List<string>> getCountriesAsync();
-        public List<string> getHolidaysForSpecificCountry(string countryName, int year);
-        public string getSpecificDayStatus(DateTime date);
-        public int getMaximumFreeDaysInRow(string countryName, int year);
+        public Task<List<string>> GetCountriesAsync();
+        public Task<List<IGrouping<string, Holiday>>> GetHolidaysForSpecificCountryAsync(string countryName, string year);
+        public string GetSpecificDayStatus(DateTime date);
+        public int GetMaximumFreeDaysInRow(string countryName, int year);
 
     }
 }

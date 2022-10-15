@@ -9,32 +9,37 @@ namespace Holidays_WebAPI.Services
     {
         static readonly HttpClient client = new HttpClient();
 
-        public async Task<List<string>> getCountriesAsync()
+        public async Task<List<string>> GetCountriesAsync()
         {
             string responseBody = await client.GetStringAsync("https://kayaposoft.com/enrico/json/v2.0/?action=getSupportedCountries");
 
             var countries = JsonConvert.DeserializeObject<List<Country>>(responseBody);
 
-            var countriesList = new List<string>();
+            var countriesList = countries.Select(c => c.FullName).ToList();
 
-            foreach(Country country in countries)
-            {
-                countriesList.Add(country.FullName);
-            }
             return countriesList;
         }
 
-        public List<string> getHolidaysForSpecificCountry(string countryName, int year)
+        public async Task<List<IGrouping<string, Holiday>>> GetHolidaysForSpecificCountryAsync(string countryName, string year)
+        {
+
+            var uri = $"https://kayaposoft.com/enrico/json/v2.0/?action=getHolidaysForYear&year={year}&country={countryName}&holidayType=all";
+
+            string responseBody = await client.GetStringAsync(uri);
+
+            var holidays = JsonConvert.DeserializeObject<List<Holiday>>(responseBody);
+
+            var groupedHolidays = holidays.GroupBy(h => h.date.Month).ToList();
+
+            return groupedHolidays;
+        }
+
+        public int GetMaximumFreeDaysInRow(string countryName, int year)
         {
             throw new NotImplementedException();
         }
 
-        public int getMaximumFreeDaysInRow(string countryName, int year)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string getSpecificDayStatus(DateTime date)
+        public string GetSpecificDayStatus(DateTime date)
         {
             throw new NotImplementedException();
         }
