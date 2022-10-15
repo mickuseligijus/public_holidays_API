@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Holidays_WebAPI.Services;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +10,29 @@ namespace Holidays_WebAPI.Controllers
     [ApiController]
     public class HolidayController : ControllerBase
     {
+        private IHolidayService _holidayService;
+        public HolidayController(IHolidayService holidayService)
+        {
+            _holidayService = holidayService;
+        }
         // GET: api/<HolidayController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public string GetCountries()
         {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<HolidayController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<HolidayController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<HolidayController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<HolidayController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            string result = "";
+            try
+            {
+                result = JsonSerializer.Serialize(_holidayService.getCountriesAsync().Result);
+            }
+            catch(HttpRequestException e) 
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return result;
         }
     }
 }
