@@ -25,3 +25,4 @@ D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_We
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\obj\Debug\net6.0\Holidays_WebAPI.pdb
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\obj\Debug\net6.0\Holidays_WebAPI.genruntimeconfig.cache
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\obj\Debug\net6.0\ref\Holidays_WebAPI.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\Newtonsoft.Json.dll
