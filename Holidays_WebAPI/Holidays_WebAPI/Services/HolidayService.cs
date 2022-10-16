@@ -1,6 +1,7 @@
 ﻿using Holidays_WebAPI.Models;
 using Newtonsoft.Json;
 using System.Text.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Holidays_WebAPI.Services
 {
@@ -11,7 +12,7 @@ namespace Holidays_WebAPI.Services
 
         public async Task<List<string>> GetCountriesAsync()
         {
-            string responseBody = await client.GetStringAsync("https://kayaposoft.com/enrico/json/v2.0/?action=getSupportedCountries");
+            var responseBody = await client.GetStringAsync("https://kayaposoft.com/enrico/json/v2.0/?action=getSupportedCountries");
 
             var countries = JsonConvert.DeserializeObject<List<Country>>(responseBody);
 
@@ -20,12 +21,12 @@ namespace Holidays_WebAPI.Services
             return countriesList;
         }
 
-        public async Task<List<IGrouping<string, Holiday>>> GetHolidaysForSpecificCountryAsync(string countryName, string year)
+        public async Task<List<IGrouping<string, Holiday>>> GetHolidaysForSpecificCountryAsync(string countryCode, string year)
         {
 
-            var uri = $"https://kayaposoft.com/enrico/json/v2.0/?action=getHolidaysForYear&year={year}&country={countryName}&holidayType=all";
+            var uri = $"https://kayaposoft.com/enrico/json/v2.0/?action=getHolidaysForYear&year={year}&country={countryCode}&holidayType=all";
 
-            string responseBody = await client.GetStringAsync(uri);
+            var responseBody = await client.GetStringAsync(uri);
 
             var holidays = JsonConvert.DeserializeObject<List<Holiday>>(responseBody);
 
@@ -39,9 +40,33 @@ namespace Holidays_WebAPI.Services
             throw new NotImplementedException();
         }
 
-        public string GetSpecificDayStatus(DateTime date)
+        public async Task<string> GetSpecificDayStatus(string date, string countryCode)
         {
-            throw new NotImplementedException();
+            var uriWorkDay = $"https://kayaposoft.com/enrico/json/v2.0?action=isWorkDay&date={date}&country={countryCode}";
+
+            var uriPublicHoliday = $"https://kayaposoft.com/enrico/json/v2.0/?action=isPublicHoliday&date={date}&country={countryCode}"; //holiday
+            
+            
+                var responseBody = await client.GetStringAsync(uriWorkDay);
+
+            var response = JsonConvert.DeserializeObject<IDictionary<string, bool>>(responseBody);
+
+            if (response["isWorkDay"])
+            {
+                return "workday";
+            }
+
+            responseBody = await client.GetStringAsync(uriPublicHoliday);
+
+            response = JsonConvert.DeserializeObject<IDictionary<string, bool>>(responseBody);
+
+            if (response["isPublicHoliday"])
+            {
+                return "holiday";
+            }
+
+            return "free day";
+
         }
     }
 }

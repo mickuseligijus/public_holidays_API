@@ -29,7 +29,7 @@ namespace Holidays_WebAPI.Controllers
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("Exception while trying to connect to client server " + e.Message);
             }
             catch (Exception e)
             {
@@ -48,7 +48,7 @@ namespace Holidays_WebAPI.Controllers
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("Exception while trying to connect to client server" + e.Message);
             }
             catch (Exception e)
             {
@@ -56,7 +56,24 @@ namespace Holidays_WebAPI.Controllers
             }
             return result;
 
-
+        }
+        [HttpGet("dayType/{date}/{countryCode}")]
+        public async Task<string> GetSpecificDayType (string date, string countryCode)
+        {
+            string result = null;
+            try
+            {
+                result = await _holidayService.GetSpecificDayStatus(date, countryCode);
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("Exception while trying to connect to client server " + e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return result;
         }
     }
 }
