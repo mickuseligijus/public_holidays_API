@@ -57,13 +57,13 @@ namespace Holidays_WebAPI.Controllers
             return result;
 
         }
-        [HttpGet("dayType/{date}/{countryCode}")]
-        public async Task<string> GetSpecificDayType (string date, string countryCode)
+        [HttpGet("dayType/{countryCode}/{date}")]
+        public async Task<string> GetSpecificDayType (string countryCode, string date)
         {
             string result = null;
             try
             {
-                result = await _holidayService.GetSpecificDayStatus(date, countryCode);
+                result = await _holidayService.GetSpecificDayStatusAsync(date, countryCode);
             }
             catch (HttpRequestException e)
             {
@@ -74,6 +74,12 @@ namespace Holidays_WebAPI.Controllers
                 Console.WriteLine(e.Message);
             }
             return result;
+        }
+        [HttpGet("maximumDays/{countryCode}/{year}")]
+        public async Task<int> GetMaximumFreeDaysInRowAsync(string countryCode, string year)
+        {
+            var x = _holidayService.GetMaximumFreeDaysInRow(countryCode, year).Result;
+            return x;
         }
     }
 }

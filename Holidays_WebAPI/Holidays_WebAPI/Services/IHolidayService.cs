@@ -6,8 +6,8 @@ namespace Holidays_WebAPI.Services
     {
         public Task<List<string>> GetCountriesAsync();
         public Task<List<IGrouping<string, Holiday>>> GetHolidaysForSpecificCountryAsync(string countryCode, string year);
-        public Task<string> GetSpecificDayStatus(string date, string countryCode);
-        public int GetMaximumFreeDaysInRow(string countryName, int year);
+        public Task<string> GetSpecificDayStatusAsync(string date, string countryCode);
+        public Task<int> GetMaximumFreeDaysInRow(string countryCode, string year);
 
     }
 }
