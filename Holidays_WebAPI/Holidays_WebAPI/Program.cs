@@ -1,4 +1,6 @@
+using Holidays_WebAPI.Context;
 using Holidays_WebAPI.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IHolidayService, HolidayService>();
+
+var myconn = builder.Configuration.GetSection("ConnectionStrings").Get<IDictionary<string, string>>();
+
+builder.Services.AddDbContext<HolidayDbContext>(item => item.UseSqlServer(myconn["myconn"]));
 
 var app = builder.Build();
 

@@ -1,9 +1,8 @@
-﻿using Holidays_WebAPI.Models;
+﻿using Holidays_WebAPI.Context;
+using Holidays_WebAPI.Models.JsonModels;
 using Holidays_WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Text.Json;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,15 +12,19 @@ namespace Holidays_WebAPI.Controllers
     [ApiController]
     public class HolidayController : ControllerBase
     {
+        private readonly HolidayDbContext _context;
+
         private IHolidayService _holidayService;
-        public HolidayController(IHolidayService holidayService)
+        public HolidayController(IHolidayService holidayService, HolidayDbContext context)
         {
             _holidayService = holidayService;
+            _context = context;
         }
         // GET: api/<HolidayController>
         [HttpGet]
         public async Task<List<string>> GetCountries()
         {
+            /*_context.Countries.Add(null);*/
             List<string> result = null;
             try
             {
@@ -37,14 +40,14 @@ namespace Holidays_WebAPI.Controllers
             }
             return result;
         }
-        [HttpGet("{country}/{year}")]
-        public async Task<List<IGrouping<string, Holiday>>> GetGroupedSpecificYearCountryHolidaysByMonth(string country, string year)
+        [HttpGet("{CountryJson}/{year}")]
+        public async Task<List<IGrouping<string, HolidayJson>>> GetGroupedSpecificYearCountryHolidaysByMonth(string CountryJson, string year)
         {
 
-            List<IGrouping<string, Holiday>> result = null;
+            List<IGrouping<string, HolidayJson>> result = null;
             try
             {
-                result = await _holidayService.GetHolidaysForSpecificCountryAsync(country, year);
+                result = await _holidayService.GetHolidaysForSpecificCountryAsync(CountryJson, year);
             }
             catch (HttpRequestException e)
             {
@@ -58,12 +61,12 @@ namespace Holidays_WebAPI.Controllers
 
         }
         [HttpGet("dayType/{countryCode}/{date}")]
-        public async Task<string> GetSpecificDayType (string countryCode, string date)
+        public async Task<string> GetSpecificDayTypeAsync(string countryCode, string date)
         {
             string result = null;
             try
             {
-                result = await _holidayService.GetSpecificDayStatusAsync(date, countryCode);
+                result = await _holidayService.GetSpecificDayStatusAsync(countryCode, date);
             }
             catch (HttpRequestException e)
             {
