@@ -10,9 +10,9 @@ namespace Holidays_WebAPI.Context
         {
 
         }
-        public DbSet<Country> Countries;
-        public DbSet<Region> Regions;
-        public DbSet<Name> Names;
-        public DbSet<Holiday> Holidays;
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Region> Regions { get; set; }
+        public DbSet<Name> Names { get; set; }
+        public DbSet<Holiday> Holidays { get; set; }
     }
 }

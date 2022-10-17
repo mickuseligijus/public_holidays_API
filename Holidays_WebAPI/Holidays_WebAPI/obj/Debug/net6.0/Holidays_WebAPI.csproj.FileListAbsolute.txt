@@ -262,3 +262,5 @@ D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_We
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\MySqlConnector.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\Pomelo.EntityFrameworkCore.MySql.dll

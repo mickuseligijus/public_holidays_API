@@ -12,9 +12,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IHolidayService, HolidayService>();
 
-var myconn = builder.Configuration.GetSection("ConnectionStrings").Get<IDictionary<string, string>>();
-
-builder.Services.AddDbContext<HolidayDbContext>(item => item.UseSqlServer(myconn["myconn"]));
+builder.Services.AddDbContextPool<HolidayDbContext>(options =>
+{
+    var connetionString = builder.Configuration.GetConnectionString("myconn");
+    options.UseMySql(connetionString, ServerVersion.AutoDetect(connetionString));
+});
 
 var app = builder.Build();
 
