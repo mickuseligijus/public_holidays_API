@@ -9,5 +9,6 @@
     {
         public DateFormatHoliday Date { get; set; }
         public List<Name> Name { get; set; }
+        public string HolidayType { get; set; }
     }
 }

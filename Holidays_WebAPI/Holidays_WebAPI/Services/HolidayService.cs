@@ -1,9 +1,5 @@
-﻿using Holidays_WebAPI.Models;
-using Holidays_WebAPI.Models.JsonModels;
+﻿using Holidays_WebAPI.Models.JsonModels;
 using Newtonsoft.Json;
-using System.Text.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
-
 namespace Holidays_WebAPI.Services
 {
 
@@ -11,18 +7,17 @@ namespace Holidays_WebAPI.Services
     {
         static readonly HttpClient client = new HttpClient();
 
-        public async Task<List<string>> GetCountriesAsync()
+        public async Task<List<CountryJson>> GetCountriesAsync()
         {
             var responseBody = await client.GetStringAsync("https://kayaposoft.com/enrico/json/v2.0/?action=getSupportedCountries");
 
             var countries = JsonConvert.DeserializeObject<List<CountryJson>>(responseBody);
 
-            var countriesList = countries.Select(c => c.FullName).ToList();
 
-            return countriesList;
+            return countries;
         }
 
-        public async Task<List<IGrouping<string, HolidayJson>>> GetHolidaysForSpecificCountryAsync(string countryCode, string year)
+        public async Task<List<HolidayJson>> GetHolidaysForSpecificCountryAsync(string countryCode, string year)
         {
 
             var uri = $"https://kayaposoft.com/enrico/json/v2.0/?action=getHolidaysForYear&year={year}&country={countryCode}&holidayType=all";
@@ -31,9 +26,8 @@ namespace Holidays_WebAPI.Services
 
             var holidays = JsonConvert.DeserializeObject<List<HolidayJson>>(responseBody);
 
-            var groupedHolidays = holidays.GroupBy(h => h.Date.Month).ToList();
 
-            return groupedHolidays;
+            return holidays;
         }
 
         public async Task<string> GetSpecificDayStatusAsync(string countryCode, string date)
@@ -70,17 +64,14 @@ namespace Holidays_WebAPI.Services
          /*   DateTime x = new Date(); *//**/
             var holidays = GetHolidaysForSpecificCountryAsync(countryCode, year).Result;
             var freeDays = 0;
-            foreach(var h in holidays)
+            foreach(var holiday in holidays)
             {
-                foreach(var HolidayJson in h)
-                {
-
                     //If day is Friday
-                    if (HolidayJson.Date.DayOfWeek.Equals("5"))
+                    if (holiday.Date.DayOfWeek.Equals("5"))
                     {
 
                         var tempFreeDays = 3;
-                        var day = HolidayJson.Date.ToString(); //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
+                        var day = holiday.Date.ToString(); //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
 
                         tempFreeDays = iterateThrougDays(day, -1, countryCode, tempFreeDays, false);
                         tempFreeDays = iterateThrougDays(day, 3, countryCode, tempFreeDays, true);
@@ -92,10 +83,10 @@ namespace Holidays_WebAPI.Services
 
                     }
                     //If day is Monday
-                    else if (HolidayJson.Date.DayOfWeek.Equals("1"))
+                    else if (holiday.Date.DayOfWeek.Equals("1"))
                     {
                         var tempFreeDays = 3;
-                        var day = HolidayJson.Date.ToString(); //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
+                        var day = holiday.Date.ToString(); //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
 
                         tempFreeDays = iterateThrougDays(day, -3, countryCode, tempFreeDays, false);
                         tempFreeDays = iterateThrougDays(day, 1, countryCode, tempFreeDays, true);
@@ -108,10 +99,10 @@ namespace Holidays_WebAPI.Services
 
                     }
                     //If day is Saturday
-                    else if (HolidayJson.Date.DayOfWeek.Equals("6"))
+                    else if (holiday.Date.DayOfWeek.Equals("6"))
                     {
                         var tempFreeDays = 2;
-                        var day = HolidayJson.Date.ToString();  //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
+                        var day = holiday.Date.ToString();  //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
 
                         tempFreeDays = iterateThrougDays(day, -1, countryCode, tempFreeDays, false);
                         tempFreeDays = iterateThrougDays(day, 2, countryCode, tempFreeDays, true);
@@ -123,10 +114,10 @@ namespace Holidays_WebAPI.Services
                         }
                     }
                     //If day is Sunday
-                    else if (HolidayJson.Date.DayOfWeek.Equals("7"))
+                    else if (holiday.Date.DayOfWeek.Equals("7"))
                     {
                         var tempFreeDays = 2;
-                        var day = HolidayJson.Date.ToString(); //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
+                        var day = holiday.Date.ToString(); //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
 
                         tempFreeDays = iterateThrougDays(day, -2, countryCode, tempFreeDays, false);
                         tempFreeDays = iterateThrougDays(day, 1, countryCode, tempFreeDays, true);
@@ -142,7 +133,7 @@ namespace Holidays_WebAPI.Services
                     else
                     {
                         var tempFreeDays = 1;
-                        var day = HolidayJson.Date.ToString();  //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
+                        var day = holiday.Date.ToString();  //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
 
                         tempFreeDays = iterateThrougDays(day, -1, countryCode, tempFreeDays, false);
                         tempFreeDays = iterateThrougDays(day, 1, countryCode, tempFreeDays, true);
@@ -154,7 +145,7 @@ namespace Holidays_WebAPI.Services
                         }
                     }
 
-                }
+                
             }
 
             

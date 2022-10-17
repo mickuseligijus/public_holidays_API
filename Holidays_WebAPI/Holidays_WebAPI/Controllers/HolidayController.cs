@@ -25,39 +25,47 @@ namespace Holidays_WebAPI.Controllers
         public async Task<List<string>> GetCountries()
         {
             /*_context.Countries.Add(null);*/
-            List<string> result = null;
+            List<CountryJson> countries = null;
             try
             {
-                result = await _holidayService.GetCountriesAsync();
+                countries = await _holidayService.GetCountriesAsync();
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine("Exception while trying to connect to client server " + e.Message);
+                Console.WriteLine("Exception while retrieving data from client server " + e.Message);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
+
+
+
+            var result = countries.Select(c => c.FullName).ToList();
+
+
             return result;
         }
         [HttpGet("{CountryJson}/{year}")]
         public async Task<List<IGrouping<string, HolidayJson>>> GetGroupedSpecificYearCountryHolidaysByMonth(string CountryJson, string year)
         {
 
-            List<IGrouping<string, HolidayJson>> result = null;
+            List<HolidayJson> holidays = null;
             try
             {
-                result = await _holidayService.GetHolidaysForSpecificCountryAsync(CountryJson, year);
+                holidays = await _holidayService.GetHolidaysForSpecificCountryAsync(CountryJson, year);
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine("Exception while trying to connect to client server" + e.Message);
+                Console.WriteLine("Exception while retrieving data from client server " + e.Message);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-            return result;
+
+            var result = holidays.GroupBy(h => h.Date.Month).ToList();
+            return  result;
 
         }
         [HttpGet("dayType/{countryCode}/{date}")]
@@ -70,7 +78,7 @@ namespace Holidays_WebAPI.Controllers
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine("Exception while trying to connect to client server " + e.Message);
+                Console.WriteLine("Exception while retrieving data from client server " + e.Message);
             }
             catch (Exception e)
             {
