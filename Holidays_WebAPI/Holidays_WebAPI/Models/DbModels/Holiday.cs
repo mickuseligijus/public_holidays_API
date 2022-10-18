@@ -4,7 +4,7 @@
     {
         public int HolidayId { get; set; }
 
-        public DateTime Date { get; set; } 
+        public string Date { get; set; } 
 
         public string HolidayType {get; set; }
         public List<Name> Names { get; set; }

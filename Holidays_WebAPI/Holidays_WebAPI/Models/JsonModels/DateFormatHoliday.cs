@@ -6,10 +6,6 @@ namespace Holidays_WebAPI.Models.JsonModels
     {
         public string DayOfWeek { get; set; }
 
-        public override string ToString()
-        {
-            return Day + "/" + Month + "/" + Year;
-        }
 
     }
 }

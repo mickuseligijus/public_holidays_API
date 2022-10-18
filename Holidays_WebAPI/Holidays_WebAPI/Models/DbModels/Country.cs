@@ -10,11 +10,11 @@ namespace Holidays_WebAPI.Models.DbModels
         [Required]
         public string FullName { get; set; }
         [Required]
-        public DateTime DateFrom { get; set; }
+        public string DateFrom { get; set; }
         [Required]
-        public DateTime DateTo { get; set; }
+        public string DateTo { get; set; }
         public ICollection<Region> Regions { get; set; }
-        public ICollection<Name> Names { get; set; }
+        public ICollection<HolidayType> HolidayTypes { get; set; }
 
 
 

@@ -1,7 +1,11 @@
 ﻿using Holidays_WebAPI.Context;
+using Holidays_WebAPI.Helper;
+using Holidays_WebAPI.Models.DbModels;
 using Holidays_WebAPI.Models.JsonModels;
 using Holidays_WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Name = Holidays_WebAPI.Models.DbModels.Name;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,23 +16,31 @@ namespace Holidays_WebAPI.Controllers
     [ApiController]
     public class HolidayController : ControllerBase
     {
-        private readonly HolidayDbContext _context;
+        /*private readonly HolidayDbContext _context;*/
 
         private IHolidayService _holidayService;
-        public HolidayController(IHolidayService holidayService, HolidayDbContext context)
+        /*        public HolidayController(IHolidayService holidayService, HolidayDbContext context)
+                {
+                    _holidayService = holidayService;
+                    _context = context;
+                }*/
+        public HolidayController(IHolidayService holidayService)
         {
             _holidayService = holidayService;
-            _context = context;
+
         }
+
         // GET: api/<HolidayController>
         [HttpGet]
         public async Task<List<string>> GetCountries()
         {
             /*_context.Countries.Add(null);*/
-            List<CountryJson> countries = null;
+            var countries = new List<CountryJson>();
+            var countriesDb = new List<Country>();
             try
             {
                 countries = await _holidayService.GetCountriesAsync();
+                countriesDb = Converter.ConvertCountry(countries);
             }
             catch (HttpRequestException e)
             {
@@ -38,8 +50,17 @@ namespace Holidays_WebAPI.Controllers
             {
                 Console.WriteLine(e.Message);
             }
+            
 
 
+           /* var country = new Country { CountryCode = "ltu", FullName = "Lithuania" };*/
+
+
+/*            _context.Countries.Add(country);
+            _context.SaveChanges();*/
+
+          /*  var x = _context.Countries.ToList();
+*/
 
             var result = countries.Select(c => c.FullName).ToList();
 
@@ -50,10 +71,12 @@ namespace Holidays_WebAPI.Controllers
         public async Task<List<IGrouping<string, HolidayJson>>> GetGroupedSpecificYearCountryHolidaysByMonth(string CountryJson, string year)
         {
 
-            List<HolidayJson> holidays = null;
+            var holidaysJson = new List<HolidayJson>();
+            var holidaysDb = new List<Holiday>();
             try
             {
-                holidays = await _holidayService.GetHolidaysForSpecificCountryAsync(CountryJson, year);
+                holidaysJson = await _holidayService.GetHolidaysForSpecificCountryAsync(CountryJson, year);
+                holidaysDb = Converter.ConvertHoliday(holidaysJson);
             }
             catch (HttpRequestException e)
             {
@@ -64,14 +87,15 @@ namespace Holidays_WebAPI.Controllers
                 Console.WriteLine(e.Message);
             }
 
-            var result = holidays.GroupBy(h => h.Date.Month).ToList();
+
+            var result = holidaysJson.GroupBy(h => h.Date.Month).ToList();
             return  result;
 
         }
         [HttpGet("dayType/{countryCode}/{date}")]
         public async Task<string> GetSpecificDayTypeAsync(string countryCode, string date)
         {
-            string result = null;
+            string result = "";
             try
             {
                 result = await _holidayService.GetSpecificDayStatusAsync(countryCode, date);
