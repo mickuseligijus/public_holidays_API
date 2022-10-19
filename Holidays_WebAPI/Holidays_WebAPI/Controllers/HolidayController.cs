@@ -167,12 +167,14 @@ namespace Holidays_WebAPI.Controllers
                         .Where(c => c.Year.Equals(year) && c.CountryCode.Equals(countryCode))
                         .Select(c => c.MaxNumber)
                         .First();
+                    return JsonSerializer.Serialize(maxDayNumber);
                 }
                 else
                 {
                     maxDayNumber = _holidayService.GetMaximumFreeDaysInRow(countryCode, year);
                     _context.CountryMax.Add(new CountryMax { CountryCode=countryCode, Year=year, MaxNumber= maxDayNumber });
                     _context.SaveChanges();
+                    return JsonSerializer.Serialize(maxDayNumber);
                 }
                
             }
