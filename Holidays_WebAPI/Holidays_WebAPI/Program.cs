@@ -4,12 +4,19 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+builder.Services.AddOpenApiDocument(c =>
+{
+    c.DocumentName = "v1";
+    c.PostProcess = doc =>
+    {
+        doc.Info.Version = "v1";
+        doc.Info.Title = "Holiday OpenAPI";
+    };
+});
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
 builder.Services.AddSingleton<IHolidayService, HolidayService>();
 
 builder.Services.AddDbContextPool<HolidayDbContext>(options =>
@@ -20,12 +27,11 @@ builder.Services.AddDbContextPool<HolidayDbContext>(options =>
 
 var app = builder.Build();
 
-app.UseSwagger();
-// Configure the HTTP request pipeline.
+app.UseOpenApi();
+
 if (app.Environment.IsDevelopment())
 {
-
-    app.UseSwaggerUI();
+    app.UseSwaggerUi3();
 }
 
 app.UseHttpsRedirection();

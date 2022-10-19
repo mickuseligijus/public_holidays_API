@@ -4,6 +4,7 @@ using Holidays_WebAPI.Models.DbModels;
 using Holidays_WebAPI.Models.JsonModels;
 using Holidays_WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using Name = Holidays_WebAPI.Models.DbModels.Name;
 
 
@@ -25,21 +26,22 @@ namespace Holidays_WebAPI.Controllers
         }
 
         // GET: api/<HolidayController>
-        [HttpGet]
-        public async Task<List<string>> GetCountries()
+        [HttpGet("countries")]
+        public async Task<string> GetCountries()
         {
             /*_context.Countries.Add(null);*/
             var countries = new List<CountryJson>();
             var countriesDb = new List<Country>();
-            var result = new List<string>();
+            var result = "";
             try
             {
                 if (_context.Countries.Any())
                 {
 
                     countriesDb = _context.Countries.ToList();
-                    result = countriesDb.Select(x => x.FullName).ToList();
-                   
+                    var countriesInfo = countriesDb.Select(country => new { country.FullName, country.CountryCode }).ToList();
+                    result = JsonSerializer.Serialize(countriesInfo);
+
                 }
                 else
                 {
@@ -48,6 +50,9 @@ namespace Holidays_WebAPI.Controllers
 
                     _context.Countries.AddRange(countriesDb);
                     _context.SaveChanges();
+
+                    var countriesInfo = countries.Select(country => new { country.FullName, country.CountryCode }).ToList();
+                    result = JsonSerializer.Serialize(countriesInfo);
 
                 }
                 
@@ -65,7 +70,7 @@ namespace Holidays_WebAPI.Controllers
             return result;
         }
         [HttpGet("{countryCode}/{year}")]
-        public async Task<List<IGrouping<string, HolidayJson>>> GetGroupedSpecificYearCountryHolidaysByMonth(string countryCode, string year)
+        public async Task<string> GetGroupedSpecificYearCountryHolidaysByMonth(string countryCode, string year)
         {
 
             var holidaysJson = new List<HolidayJson>();
@@ -121,7 +126,7 @@ namespace Holidays_WebAPI.Controllers
 
 
             var result = holidaysJson.GroupBy(h => h.Date.Month).ToList();
-            return  result;
+            return JsonSerializer.Serialize(result);
 
         }
         [HttpGet("dayType/{countryCode}/{date}")]
@@ -140,10 +145,10 @@ namespace Holidays_WebAPI.Controllers
             {
                 Console.WriteLine(e.Message);
             }
-            return result;
+            return JsonSerializer.Serialize(result);
         }
         [HttpGet("maximumDays/{countryCode}/{year}")]
-        public async Task<int> GetMaximumFreeDaysInRowAsync(string countryCode, string year)
+        public async Task<string> GetMaximumFreeDaysInRowAsync(string countryCode, string year)
         {
             int maxDayNumber = 0;
             try
@@ -171,7 +176,7 @@ namespace Holidays_WebAPI.Controllers
             {
                 Console.WriteLine(e.Message);
             }
-            return maxDayNumber;
+            return JsonSerializer.Serialize(maxDayNumber);
         }
     }
 }

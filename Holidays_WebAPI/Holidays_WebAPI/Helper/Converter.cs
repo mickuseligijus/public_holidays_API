@@ -15,18 +15,26 @@ namespace Holidays_WebAPI.Helper
             foreach (var country in countriesJson)
             {
                 var regions = new List<Region>();
-                foreach (var region in country.Regions)
+                if(country.Regions != null)
                 {
-                    var tempRegion = new Region { RegionName = region };
-                    regions.Add(tempRegion);
+                    foreach (var region in country.Regions)
+                    {
+                        var tempRegion = new Region { RegionName = region };
+                        regions.Add(tempRegion);
+                    }
                 }
 
+
                 var dateTypes = new List<HolidayType>();
-                foreach (var holidayType in country.HolidayTypes)
+                if(country.HolidayTypes != null)
                 {
-                    var tempHolidayType = new HolidayType { HolidayTypeName = holidayType };
-                    dateTypes.Add(tempHolidayType);
+                    foreach (var holidayType in country.HolidayTypes)
+                    {
+                        var tempHolidayType = new HolidayType { HolidayTypeName = holidayType };
+                        dateTypes.Add(tempHolidayType);
+                    }
                 }
+
 
                 var tempCountry = new Country { CountryCode = country.CountryCode, FullName = country.FullName, DateTo = country.ToDate.ToString(), DateFrom = country.FromDate.ToString(), Regions = regions, HolidayTypes = dateTypes };
 

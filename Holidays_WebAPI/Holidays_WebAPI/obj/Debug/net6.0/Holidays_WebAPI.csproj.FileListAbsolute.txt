@@ -5,10 +5,6 @@ D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_We
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\Holidays_WebAPI.runtimeconfig.json
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\Holidays_WebAPI.dll
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\Holidays_WebAPI.pdb
-D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\Microsoft.OpenApi.dll
-D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
-D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\obj\Debug\net6.0\Holidays_WebAPI.csproj.AssemblyReference.cache
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\obj\Debug\net6.0\Holidays_WebAPI.GeneratedMSBuildEditorConfig.editorconfig
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\obj\Debug\net6.0\Holidays_WebAPI.AssemblyInfoInputs.cache
@@ -264,3 +260,13 @@ D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_We
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\MySqlConnector.dll
 D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\Pomelo.EntityFrameworkCore.MySql.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\Namotion.Reflection.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\NJsonSchema.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\NJsonSchema.Yaml.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\NSwag.Annotations.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\NSwag.AspNetCore.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\NSwag.Core.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\NSwag.Core.Yaml.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\NSwag.Generation.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\NSwag.Generation.AspNetCore.dll
+D:\Programu_sistemos\7_semestras\public_holidays_API\Holidays_WebAPI\Holidays_WebAPI\bin\Debug\net6.0\YamlDotNet.dll
