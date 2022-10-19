@@ -1,8 +1,5 @@
-﻿using Holidays_WebAPI.Models;
+﻿using Holidays_WebAPI.Models.JsonModels;
 using Newtonsoft.Json;
-using System.Text.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
-
 namespace Holidays_WebAPI.Services
 {
 
@@ -10,36 +7,34 @@ namespace Holidays_WebAPI.Services
     {
         static readonly HttpClient client = new HttpClient();
 
-        public async Task<List<string>> GetCountriesAsync()
+        public async Task<List<CountryJson>> GetCountriesAsync()
         {
             var responseBody = await client.GetStringAsync("https://kayaposoft.com/enrico/json/v2.0/?action=getSupportedCountries");
 
-            var countries = JsonConvert.DeserializeObject<List<Country>>(responseBody);
+            var countries = JsonConvert.DeserializeObject<List<CountryJson>>(responseBody);
 
-            var countriesList = countries.Select(c => c.FullName).ToList();
 
-            return countriesList;
+            return countries;
         }
 
-        public async Task<List<IGrouping<string, Holiday>>> GetHolidaysForSpecificCountryAsync(string countryCode, string year)
+        public async Task<List<HolidayJson>> GetHolidaysForSpecificCountryAsync(string countryCode, string year)
         {
 
             var uri = $"https://kayaposoft.com/enrico/json/v2.0/?action=getHolidaysForYear&year={year}&country={countryCode}&holidayType=all";
 
             var responseBody = await client.GetStringAsync(uri);
 
-            var holidays = JsonConvert.DeserializeObject<List<Holiday>>(responseBody);
+            var holidays = JsonConvert.DeserializeObject<List<HolidayJson>>(responseBody);
 
-            var groupedHolidays = holidays.GroupBy(h => h.date.Month).ToList();
 
-            return groupedHolidays;
+            return holidays;
         }
 
-        public async Task<string> GetSpecificDayStatusAsync(string date, string countryCode)
+        public async Task<string> GetSpecificDayStatusAsync(string countryCode, string date)
         {
             var uriWorkDay = $"https://kayaposoft.com/enrico/json/v2.0?action=isWorkDay&date={date}&country={countryCode}";
 
-            var uriPublicHoliday = $"https://kayaposoft.com/enrico/json/v2.0/?action=isPublicHoliday&date={date}&country={countryCode}"; //holiday
+            var uriPublicHoliday = $"https://kayaposoft.com/enrico/json/v2.0/?action=isPublicHoliday&date={date}&country={countryCode}"; //HolidayJson
             
             
             var responseBody = await client.GetStringAsync(uriWorkDay);
@@ -57,29 +52,26 @@ namespace Holidays_WebAPI.Services
 
             if (response["isPublicHoliday"])
             {
-                return "holiday";
+                return "HolidayJson";
             }
 
             return "free day";
 
         }
 
-        public async Task<int> GetMaximumFreeDaysInRow(string countryCode, string year)
+        public int GetMaximumFreeDaysInRow(string countryCode, string year)
         {
          /*   DateTime x = new Date(); *//**/
             var holidays = GetHolidaysForSpecificCountryAsync(countryCode, year).Result;
             var freeDays = 0;
-            foreach(var h in holidays)
+            foreach(var holiday in holidays)
             {
-                foreach(var holiday in h)
-                {
-
                     //If day is Friday
-                    if (holiday.date.DayOfWeek.Equals("5"))
+                    if (holiday.Date.DayOfWeek.Equals("5"))
                     {
 
                         var tempFreeDays = 3;
-                        var day = holiday.date.Day + "/" + holiday.date.Month + "/" + holiday.date.Year;
+                        var day = holiday.Date.ToString(); //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
 
                         tempFreeDays = iterateThrougDays(day, -1, countryCode, tempFreeDays, false);
                         tempFreeDays = iterateThrougDays(day, 3, countryCode, tempFreeDays, true);
@@ -91,10 +83,10 @@ namespace Holidays_WebAPI.Services
 
                     }
                     //If day is Monday
-                    else if (holiday.date.DayOfWeek.Equals("1"))
+                    else if (holiday.Date.DayOfWeek.Equals("1"))
                     {
                         var tempFreeDays = 3;
-                        var day = holiday.date.Day + "/" + holiday.date.Month + "/" + holiday.date.Year;
+                        var day = holiday.Date.ToString(); //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
 
                         tempFreeDays = iterateThrougDays(day, -3, countryCode, tempFreeDays, false);
                         tempFreeDays = iterateThrougDays(day, 1, countryCode, tempFreeDays, true);
@@ -107,10 +99,10 @@ namespace Holidays_WebAPI.Services
 
                     }
                     //If day is Saturday
-                    else if (holiday.date.DayOfWeek.Equals("6"))
+                    else if (holiday.Date.DayOfWeek.Equals("6"))
                     {
                         var tempFreeDays = 2;
-                        var day = holiday.date.Day + "/" + holiday.date.Month + "/" + holiday.date.Year;
+                        var day = holiday.Date.ToString();  //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
 
                         tempFreeDays = iterateThrougDays(day, -1, countryCode, tempFreeDays, false);
                         tempFreeDays = iterateThrougDays(day, 2, countryCode, tempFreeDays, true);
@@ -122,10 +114,10 @@ namespace Holidays_WebAPI.Services
                         }
                     }
                     //If day is Sunday
-                    else if (holiday.date.DayOfWeek.Equals("7"))
+                    else if (holiday.Date.DayOfWeek.Equals("7"))
                     {
                         var tempFreeDays = 2;
-                        var day = holiday.date.Day + "/" + holiday.date.Month + "/" + holiday.date.Year;
+                        var day = holiday.Date.ToString(); //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
 
                         tempFreeDays = iterateThrougDays(day, -2, countryCode, tempFreeDays, false);
                         tempFreeDays = iterateThrougDays(day, 1, countryCode, tempFreeDays, true);
@@ -141,7 +133,7 @@ namespace Holidays_WebAPI.Services
                     else
                     {
                         var tempFreeDays = 1;
-                        var day = holiday.date.Day + "/" + holiday.date.Month + "/" + holiday.date.Year;
+                        var day = holiday.Date.ToString();  //HolidayJson.date.Day + "/" + HolidayJson.date.Month + "/" + HolidayJson.date.Year;
 
                         tempFreeDays = iterateThrougDays(day, -1, countryCode, tempFreeDays, false);
                         tempFreeDays = iterateThrougDays(day, 1, countryCode, tempFreeDays, true);
@@ -153,7 +145,7 @@ namespace Holidays_WebAPI.Services
                         }
                     }
 
-                }
+                
             }
 
             
