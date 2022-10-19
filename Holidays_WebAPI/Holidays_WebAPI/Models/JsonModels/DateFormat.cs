@@ -8,6 +8,14 @@
 
         public override string ToString()
         {
+            if (Day.Length == 1)
+            {
+                Day = "0" + Day;
+            }
+            if (Month.Length == 1)
+            {
+                Month = "0" + Month;
+            }
             return Day + "/" + Month + "/" + Year;
         }
 
