@@ -59,7 +59,7 @@ namespace Holidays_WebAPI.Services
 
         }
 
-        public async Task<int> GetMaximumFreeDaysInRow(string countryCode, string year)
+        public int GetMaximumFreeDaysInRow(string countryCode, string year)
         {
          /*   DateTime x = new Date(); *//**/
             var holidays = GetHolidaysForSpecificCountryAsync(countryCode, year).Result;

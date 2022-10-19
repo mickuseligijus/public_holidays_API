@@ -17,12 +17,14 @@ namespace Holidays_WebAPI.Controllers
     public class HolidayController : ControllerBase
     {
         private readonly HolidayDbContext _context;
+        private readonly ILogger<HolidayController> _logger;
 
         private IHolidayService _holidayService;
-        public HolidayController(IHolidayService holidayService, HolidayDbContext context)
+        public HolidayController(IHolidayService holidayService, HolidayDbContext context, ILogger<HolidayController> logger)
         {
             _holidayService = holidayService;
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/<HolidayController>
@@ -84,12 +86,17 @@ namespace Holidays_WebAPI.Controllers
 
                     foreach (var h in holidays)
                     {
-                        var index = h.Date.LastIndexOf("/");
-                        var yearHoliday = h.Date.Substring(index + 1);
-                        if(h.CountryCode.Equals(countryCode) && yearHoliday.Equals(year))
+                        if(h.Date != null)
                         {
-                            holidayList.Add(h);
+                            var index = h.Date.LastIndexOf("/");
+                            var yearHoliday = h.Date.Substring(index + 1);
+                            if(h.CountryCode !=null)
+                            if (h.CountryCode.Equals(countryCode) && yearHoliday.Equals(year))
+                            {
+                                holidayList.Add(h);
+                            }
                         }
+
                     }
                     foreach(var h in holidayList)
                     {
@@ -148,11 +155,12 @@ namespace Holidays_WebAPI.Controllers
             return JsonSerializer.Serialize(result);
         }
         [HttpGet("maximumDays/{countryCode}/{year}")]
-        public async Task<string> GetMaximumFreeDaysInRowAsync(string countryCode, string year)
+        public string GetMaximumFreeDaysInRowAsync(string countryCode, string year)
         {
             int maxDayNumber = 0;
             try
             {
+
                 if (_context.CountryMax.Where(c => c.Year.Equals(year) && c.CountryCode.Equals(countryCode)).Any())
                 {
                     maxDayNumber = _context.CountryMax
@@ -162,7 +170,7 @@ namespace Holidays_WebAPI.Controllers
                 }
                 else
                 {
-                    maxDayNumber = _holidayService.GetMaximumFreeDaysInRow(countryCode, year).Result;
+                    maxDayNumber = _holidayService.GetMaximumFreeDaysInRow(countryCode, year);
                     _context.CountryMax.Add(new CountryMax { CountryCode=countryCode, Year=year, MaxNumber= maxDayNumber });
                     _context.SaveChanges();
                 }

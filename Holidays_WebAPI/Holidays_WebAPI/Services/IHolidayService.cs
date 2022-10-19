@@ -8,7 +8,7 @@ namespace Holidays_WebAPI.Services
         public Task<List<CountryJson>> GetCountriesAsync();
         public Task<List<HolidayJson>> GetHolidaysForSpecificCountryAsync(string countryCode, string year);
         public Task<string> GetSpecificDayStatusAsync(string countryCode, string date);
-        public Task<int> GetMaximumFreeDaysInRow(string countryCode, string year);
+        public int GetMaximumFreeDaysInRow(string countryCode, string year);
 
     }
 }
