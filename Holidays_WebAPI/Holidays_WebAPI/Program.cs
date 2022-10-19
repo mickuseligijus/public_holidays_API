@@ -28,10 +28,10 @@ builder.Services.AddDbContextPool<HolidayDbContext>(options =>
 var app = builder.Build();
 
 app.UseOpenApi();
-
+app.UseSwaggerUi3();
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerUi3();
+    
 }
 
 app.UseHttpsRedirection();
