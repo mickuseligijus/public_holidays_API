@@ -1,5 +1,7 @@
 ﻿using Holidays_WebAPI.Models.JsonModels;
 using Newtonsoft.Json;
+using System.Globalization;
+
 namespace Holidays_WebAPI.Services
 {
 
@@ -151,15 +153,19 @@ namespace Holidays_WebAPI.Services
             
             bool isWorkDay(string day, int step, string countryCode)
             {
-                var parsedDate = DateTime.Parse(day);
-                var dateToCheck = parsedDate.AddDays(step);
-                var dateToCheckString = dateToCheck.ToString("dd-MM-yyyy");
 
-                var uri = $"https://kayaposoft.com/enrico/json/v2.0?action=isWorkDay&date={dateToCheckString}=&country={countryCode}";
-                var responseBody = client.GetStringAsync(uri).Result;
-                var response = JsonConvert.DeserializeObject<IDictionary<string, bool>>(responseBody);
+                    var parsedDate = DateTime.ParseExact(day, "dd/MM/yyyy", new CultureInfo("fr-FR"));
+                    var dateToCheck = parsedDate.AddDays(step);
+                    var dateToCheckString = dateToCheck.ToString("dd-MM-yyyy");
 
-                return response["isWorkDay"];
+                    var uri = $"https://kayaposoft.com/enrico/json/v2.0?action=isWorkDay&date={dateToCheckString}=&country={countryCode}";
+                    var responseBody = client.GetStringAsync(uri).Result;
+                    var response = JsonConvert.DeserializeObject<IDictionary<string, bool>>(responseBody);
+
+                    return response["isWorkDay"];
+
+
+                
             }
             int iterateThrougDays(string day, int step, string countryCode, int acc, bool increase)
             {
