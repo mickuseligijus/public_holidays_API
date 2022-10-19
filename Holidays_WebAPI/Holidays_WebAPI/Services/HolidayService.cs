@@ -154,6 +154,7 @@ namespace Holidays_WebAPI.Services
                 var parsedDate = DateTime.Parse(day);
                 var dateToCheck = parsedDate.AddDays(step);
                 var dateToCheckString = dateToCheck.ToString("dd-MM-yyyy");
+
                 var uri = $"https://kayaposoft.com/enrico/json/v2.0?action=isWorkDay&date={dateToCheckString}=&country={countryCode}";
                 var responseBody = client.GetStringAsync(uri).Result;
                 var response = JsonConvert.DeserializeObject<IDictionary<string, bool>>(responseBody);
