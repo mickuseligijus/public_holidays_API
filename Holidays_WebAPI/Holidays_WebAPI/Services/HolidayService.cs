@@ -149,13 +149,13 @@ namespace Holidays_WebAPI.Services
             }
 
             
-            async Task<bool> isWorkDay(string day, int step, string countryCode)
+            bool isWorkDay(string day, int step, string countryCode)
             {
                 var parsedDate = DateTime.Parse(day);
                 var dateToCheck = parsedDate.AddDays(step);
                 var dateToCheckString = dateToCheck.ToString("dd-MM-yyyy");
                 var uri = $"https://kayaposoft.com/enrico/json/v2.0?action=isWorkDay&date={dateToCheckString}=&country={countryCode}";
-                var responseBody = await client.GetStringAsync(uri);
+                var responseBody = client.GetStringAsync(uri).Result;
                 var response = JsonConvert.DeserializeObject<IDictionary<string, bool>>(responseBody);
 
                 return response["isWorkDay"];
@@ -163,7 +163,7 @@ namespace Holidays_WebAPI.Services
             int iterateThrougDays(string day, int step, string countryCode, int acc, bool increase)
             {
 
-                var response = isWorkDay(day, step, countryCode).Result;
+                var response = isWorkDay(day, step, countryCode);
                 while (!response)
                 {
                     acc++;
@@ -175,7 +175,7 @@ namespace Holidays_WebAPI.Services
                     {
                         step--;
                     }
-                    response = isWorkDay(day, step, countryCode).Result;
+                    response = isWorkDay(day, step, countryCode);
                 }
                 return acc;
             }
