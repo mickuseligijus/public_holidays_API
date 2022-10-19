@@ -63,7 +63,7 @@ namespace Holidays_WebAPI.Services
         {
          /*   DateTime x = new Date(); *//**/
             var holidays = GetHolidaysForSpecificCountryAsync(countryCode, year).Result;
-            var freeDays = 0;
+            var freeDays = 2;
             foreach(var holiday in holidays)
             {
                     //If day is Friday

@@ -61,11 +61,11 @@ namespace Holidays_WebAPI.Controllers
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine("Exception while retrieving data from client server, getSupportedCountries " + e.Message);
+                _logger.LogInformation("Exception while retrieving data from client server, getSupportedCountries " + e.Message);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                _logger.LogInformation(e.Message);
             }
 
 
@@ -124,11 +124,11 @@ namespace Holidays_WebAPI.Controllers
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine("Exception while retrieving data from client server, getHolidaysForYear " + e.Message);
+                _logger.LogInformation("Exception while retrieving data from client server, getHolidaysForYear " + e.Message);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                _logger.LogInformation(e.Message);
             }
 
 
@@ -146,24 +146,23 @@ namespace Holidays_WebAPI.Controllers
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine("Exception while retrieving data from client server, isWorkDay, isPublicHoliday " + e.Message);
+                _logger.LogInformation("Exception while retrieving data from client server, isWorkDay, isPublicHoliday " + e.Message);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                _logger.LogInformation(e.Message);
             }
             return JsonSerializer.Serialize(result);
         }
         [HttpGet("maximumDays/{countryCode}/{year}")]
         public string GetMaximumFreeDaysInRowAsync(string countryCode, string year)
         {
-            int maxDayNumber = 0;
             try
             {
 
                 if (_context.CountryMax.Where(c => c.Year.Equals(year) && c.CountryCode.Equals(countryCode)).Any())
                 {
-                    maxDayNumber = _context.CountryMax
+                    var maxDayNumber = _context.CountryMax
                         .Where(c => c.Year.Equals(year) && c.CountryCode.Equals(countryCode))
                         .Select(c => c.MaxNumber)
                         .First();
@@ -171,7 +170,7 @@ namespace Holidays_WebAPI.Controllers
                 }
                 else
                 {
-                    maxDayNumber = _holidayService.GetMaximumFreeDaysInRow(countryCode, year);
+                    var maxDayNumber = _holidayService.GetMaximumFreeDaysInRow(countryCode, year);
                     _context.CountryMax.Add(new CountryMax { CountryCode=countryCode, Year=year, MaxNumber= maxDayNumber });
                     _context.SaveChanges();
                     return JsonSerializer.Serialize(maxDayNumber);
@@ -180,13 +179,15 @@ namespace Holidays_WebAPI.Controllers
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine("Exception while retrieving data from client server, isWorkday " + e.Message);
+                _logger.LogInformation("Exception while retrieving data from client server, isWorkday " + e.Message);
+                return e.Message;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                _logger.LogInformation(e.Message);
+                return e.Message;
             }
-            return JsonSerializer.Serialize(maxDayNumber);
+            return JsonSerializer.Serialize(-1);
         }
     }
 }
