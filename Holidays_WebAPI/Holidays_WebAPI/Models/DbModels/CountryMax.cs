@@ -6,6 +6,8 @@
         public string Year { get; set; }
         public int MaxNumber { get; set; }
 
+        public string CountryCode { get; set; }
+
         public int CountryId { get; set; }
     }
 }

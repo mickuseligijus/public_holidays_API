@@ -2,6 +2,7 @@
 using Holidays_WebAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Holidays_WebAPI.Migrations
 {
     [DbContext(typeof(HolidayDbContext))]
-    partial class HolidayDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221018191124_MyThirdMigration")]
+    partial class MyThirdMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,31 +45,6 @@ namespace Holidays_WebAPI.Migrations
                     b.HasKey("CountryId");
 
                     b.ToTable("Countries");
-                });
-
-            modelBuilder.Entity("Holidays_WebAPI.Models.DbModels.CountryMax", b =>
-                {
-                    b.Property<int>("CountryMaxId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("CountryCode")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MaxNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Year")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("CountryMaxId");
-
-                    b.ToTable("CountryMax");
                 });
 
             modelBuilder.Entity("Holidays_WebAPI.Models.DbModels.Holiday", b =>

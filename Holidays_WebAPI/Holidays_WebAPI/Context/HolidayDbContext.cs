@@ -14,5 +14,8 @@ namespace Holidays_WebAPI.Context
         public DbSet<Region> Regions { get; set; }
         public DbSet<Name> Names { get; set; }
         public DbSet<Holiday> Holidays { get; set; }
+
+        public DbSet<HolidayType> HolidayTypes { get; set; }
+        public DbSet<CountryMax> CountryMax { get; set; }
     }
 }
